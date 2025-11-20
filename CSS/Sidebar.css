@@ -1,0 +1,286 @@
+/* ============================================
+   HRMO SIDEBAR STYLING
+   Professional Blue Design
+   ============================================ */
+
+/* Sidebar Base */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, #0052CC 0%, #003DA5 100%) !important;
+  color: #fff;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 100;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* Sidebar Header with Logo */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 12px;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.sidebar-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  width: 100%;
+}
+
+.sidebar-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 3px;
+  object-fit: contain;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  font-size: 18px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.sidebar-overlay.open {
+  display: block;
+}
+
+/* Sidebar H2 Title */
+.sidebar h2 {
+  font-size: 18px;
+  text-align: center;
+  padding: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Menu Buttons */
+.sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: #fff;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar .menu-btn {
+  border-left: 4px solid transparent;
+  padding-left: 11px;
+}
+
+.sidebar .menu-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #ffffff;
+  padding-left: 11px;
+}
+
+.sidebar .menu-btn.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-left: 4px solid #ffffff;
+  padding-left: 11px;
+  font-weight: 600;
+}
+
+.sidebar .submenu-btn {
+  font-size: 14px;
+  padding-left: 40px;
+  border-left: 3px solid transparent;
+}
+
+.sidebar .submenu-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-left-color: #ffffff;
+}
+
+.sidebar .submenu-btn.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-left: 3px solid #ffffff;
+  font-weight: 600;
+}
+
+/* Icons */
+.sidebar .icon {
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  display: inline-block;
+}
+
+.sidebar i {
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  display: inline-block;
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  padding-left: 15px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.submenu.open {
+  display: block;
+}
+
+/* Menu Group */
+.menu-group {
+  margin: 3px 0;
+}
+
+/* Button Text */
+.btn-text {
+  flex: 1;
+}
+
+.sidebar.collapsed .btn-text {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .sidebar {
+    width: 70px;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+  }
+
+  .sidebar.open {
+    width: 280px;
+  }
+
+  .sidebar-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar-logo-section {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sidebar-title {
+    display: none;
+  }
+
+  .sidebar.open .sidebar-title {
+    display: block;
+  }
+
+  .mobile-menu-btn {
+    display: block !important;
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .sidebar.open .btn-text {
+    display: inline;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 70px;
+  }
+
+  .sidebar.open ~ .main-content {
+    margin-left: 280px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .sidebar-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar {
+    width: 280px;
+  }
+
+  .sidebar-logo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .sidebar-title {
+    font-size: 20px;
+  }
+}

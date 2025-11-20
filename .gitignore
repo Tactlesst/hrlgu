@@ -1,0 +1,45 @@
+# HR Leave Management System - Git Ignore
+
+# Configuration files with sensitive data
+config.php
+
+# Production marker
+.production
+
+# Database files (should not be in version control)
+*.sql
+database
+final_database.txt
+
+# Uploaded documents and photos
+Documents/*
+!Documents/.gitkeep
+Pictures/*
+!Pictures/.gitkeep
+!Pictures/Background.html
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
