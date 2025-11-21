@@ -30,9 +30,9 @@ if ($result && $result->num_rows > 0) {
             <td>" . htmlspecialchars($row['PositionName']) . "</td>
             <td>{$row['DateHired']}</td>
             <td>{$row['DateArchived']}</td>
-            <td>
-                <button class='restore-employee-btn btn-restore' data-id='{$row['EmployeeID']}' style='background:#007bff;color:#fff;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;'>Restore</button>
-                <button class='delete-employee-btn btn-delete' data-id='{$row['EmployeeID']}' style='background:#dc3545;color:#fff;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-left:6px;'>Delete</button>
+            <td style='display:flex;gap:8px;align-items:center;justify-content:center;'>
+                <button class='restore-employee-btn btn-restore' data-id='{$row['EmployeeID']}' title='Restore Employee' style='background:none;border:none;padding:8px;cursor:pointer;color:#007bff;font-size:18px;transition:all 0.3s ease;' onmouseover='this.style.color=\"#0056b3\"; this.style.transform=\"scale(1.2)\"' onmouseout='this.style.color=\"#007bff\"; this.style.transform=\"scale(1)\"'>↩️</button>
+                <button class='delete-employee-btn btn-delete' data-id='{$row['EmployeeID']}' title='Delete Employee' style='background:none;border:none;padding:8px;cursor:pointer;color:#dc3545;font-size:18px;transition:all 0.3s ease;' onmouseover='this.style.color=\"#c82333\"; this.style.transform=\"scale(1.2)\"' onmouseout='this.style.color=\"#dc3545\"; this.style.transform=\"scale(1)\"'>🗑️</button>
             </td>
         </tr>";
     }

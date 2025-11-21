@@ -52,7 +52,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                             class="icon">
                         <span class="btn-text">History Record Leaves</span>
                     </button>
-                    <button class="menu-btn" data-title="History" data-target="history-travel-section">
+                    <button class="menu-btn" data-title="History" data-target="travel-history-section">
                         <img src="/hrlgu/Pictures/icons/history.png" alt="History-travel"
                             class="icon">
                         <span class="btn-text">History Travel Order</span>
@@ -99,13 +99,17 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                 </button>
                 <div class="submenu">
                     <button class="submenu-btn" data-title="Travel Order Management"
-                        data-target="travel-manage-section">
+                        data-target="manage-travel-section">
                         <img src="/hrlgu/Pictures/icons/travel.png" alt="Travel" class="icon">
                         <span class="btn-text">Manage Travel Order</span>
                     </button>
-                    <button class="submenu-btn" data-title="Travel Order Management" data-target="trave-plan-section">
+                    <button class="submenu-btn" data-title="Travel Order Management" data-target="ongoing-travel-section">
                         <img src="/hrlgu/Pictures/icons/planner.png" alt="Planner" class="icon">
-                        <span class="btn-text">Plan for Travel</span>
+                        <span class="btn-text">Ongoing/Upcoming Travels</span>
+                    </button>
+                    <button class="submenu-btn" data-title="Travel Order Management" data-target="travel-history-section">
+                        <img src="/hrlgu/Pictures/icons/history.png" alt="History" class="icon">
+                        <span class="btn-text">Travel History</span>
                     </button>
                 </div>
             </div>
@@ -364,19 +368,105 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 </table>
                 </div>
 
-                <div id="manage-department-section" class="section" style="display:none;">
-                    <h2>Departments</h2>
-                    <button class="add-btn" onclick="openAddDepartmentForm()">+ Add Department</button>
-                    <input class="searchbar" type="text" id="searchDepartmentInput"
-                        placeholder="Search for Departments">
-                    <button class="search-btn" onclick="searchDepartment()">Search</button>
+                <!-- Manage Travel Order Section -->
+                <div id="manage-travel-section" class="section" style="display:none;">
+                    <div class="travel-header" style="display:flex;align-items:center;gap:10px;">
+                        <img src="/hrlgu/Pictures/logo.png" alt="icon" style="height:28px;">
+                        <h3 style="margin:0;">Manage Travel Orders</h3>
+                        <button id="openAssignTravelBtn" class="open-modal-btn" style="margin-left:auto;" onclick="openAssignTravelModal()">+ Assign Travel</button>
+                    </div>
 
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Department Name</th>
+                                <th>Control #</th>
+                                <th>Employee</th>
+                                <th>Destination</th>
+                                <th>Purpose</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
                                 <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manage-travel-tbody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ongoing/Upcoming Travels Section -->
+                <div id="ongoing-travel-section" class="section" style="display:none;">
+                    <div class="travel-header" style="display:flex;align-items:center;gap:10px;">
+                        <img src="/hrlgu/Pictures/logo.png" alt="icon" style="height:28px;">
+                        <h3 style="margin:0;">Ongoing/Upcoming Travels</h3>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Control #</th>
+                                <th>Employee</th>
+                                <th>Destination</th>
+                                <th>Purpose</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ongoing-travel-tbody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Travel History Section -->
+                <div id="travel-history-section" class="section" style="display:none;">
+                    <div class="travel-header" style="display:flex;align-items:center;gap:10px;">
+                        <img src="/hrlgu/Pictures/logo.png" alt="icon" style="height:28px;">
+                        <h3 style="margin:0;">Travel History</h3>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Control #</th>
+                                <th>Employee</th>
+                                <th>Destination</th>
+                                <th>Purpose</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="travel-history-tbody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="manage-department-section" class="section" style="display:none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                        <div style="background: #0052CC; padding: 12px 16px; border-radius: 10px;">
+                            <img src="/hrlgu/Pictures/icons/department.png" alt="Department" style="height: 28px; width: 28px; filter: brightness(0) invert(1);">
+                        </div>
+                        <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #333;">Departments</h2>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button class="add-btn" onclick="openAddDepartmentForm()" style="background: #0052CC; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">+ Add Department</button>
+                        <input class="searchbar" type="text" id="searchDepartmentInput" placeholder="Search departments..." style="flex: 1; min-width: 250px; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s ease;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                        <button class="search-btn" onclick="searchDepartment()" style="background: #f0f0f0; color: #333; padding: 12px 24px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Search</button>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                        <thead>
+                            <tr style="background: #0052CC; color: white;">
+                                <th style="padding: 16px; text-align: left; font-weight: 600;">ID</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 600;">Department Name</th>
+                                <th style="padding: 16px; text-align: center; font-weight: 600;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -384,19 +474,28 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                         </tbody>
                     </table>
                 </div>
-                <div id="manage-position-section" class="section" style="display:none;">
-                    <h2>Positions</h2>
-                    <button class="add-btn" onclick="openAddPositionForm()">+ Add Position</button>
-                    <input class="searchbar" type="text" id="searchPositionInput" placeholder="Search for Positions">
-                    <button class="search-btn" onclick="searchPosition()">Search</button>
 
-                    <table>
+                <div id="manage-position-section" class="section" style="display:none;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                        <div style="background: #0052CC; padding: 12px 16px; border-radius: 10px;">
+                            <img src="/hrlgu/Pictures/icons/position.png" alt="Position" style="height: 28px; width: 28px; filter: brightness(0) invert(1);">
+                        </div>
+                        <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #333;">Positions</h2>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button class="add-btn" onclick="openAddPositionForm()" style="background: #0052CC; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">+ Add Position</button>
+                        <input class="searchbar" type="text" id="searchPositionInput" placeholder="Search positions..." style="flex: 1; min-width: 250px; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s ease;" onfocus="this.style.borderColor='#f5576c'; this.style.boxShadow='0 0 0 3px rgba(245, 87, 108, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                        <button class="search-btn" onclick="searchPosition()" style="background: #f0f0f0; color: #333; padding: 12px 24px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Search</button>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Position Name</th>
-                                <th>Department</th>
-                                <th>Actions</th>
+                            <tr style="background: #0052CC; color: white;">
+                                <th style="padding: 16px; text-align: left; font-weight: 600;">ID</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 600;">Position Name</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 600;">Department</th>
+                                <th style="padding: 16px; text-align: center; font-weight: 600;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -900,47 +999,57 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
     </div>
 
     <div id="leaveTypeModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" id="closeLeaveTypeModal">&times;</span>
-        <h2 id="leaveTypeModalTitle">Create Leave Type</h2>
+    <div class="modal-content" style="max-width: 700px; padding: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 82, 204, 0.15);">
+        <!-- Modal Header -->
+        <div style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+            <h2 id="leaveTypeModalTitle" style="margin: 0; font-size: 24px; font-weight: 600;">Create Leave Type</h2>
+            <span class="close-modal" id="closeLeaveTypeModal" style="color: white; font-size: 28px; cursor: pointer; font-weight: 300;">&times;</span>
+        </div>
 
-        <form id="leaveTypeForm">
+        <!-- Modal Body -->
+        <form id="leaveTypeForm" style="padding: 30px;">
             <input type="hidden" name="LeaveTypeID" id="LeaveTypeID" value="">
-            <div>
-                <label for="TypeName">Type Name</label>
-                <input type="text" id="TypeName" name="TypeName" required>
+            
+            <!-- Type Name -->
+            <div style="margin-bottom: 20px;">
+                <label for="TypeName" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Type Name <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="TypeName" name="TypeName" required placeholder="e.g., Sick Leave" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
             </div>
-            <div>
-                <label for="UnitType">Leave Policy Type</label>
-                <select id="UnitType" name="UnitType">
+
+            <!-- Leave Policy Type -->
+            <div style="margin-bottom: 20px;">
+                <label for="UnitType" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Leave Policy Type</label>
+                <select id="UnitType" name="UnitType" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: white; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
                     <option value="Leave Credit" selected>Leave Credit (Balance-based)</option>
                     <option value="Fixed Days">Fixed Days (Entitlement-based)</option>
                 </select>
             </div>
 
-            <div id="fixedDaysConfigRow" style="display:none;">
-                <div>
-                    <label for="FixedDays">Max Entitlement Days</label>
-                    <input type="number" id="FixedDays" name="FixedDays" min="1" max="365" value="7">
+            <!-- Fixed Days Config -->
+            <div id="fixedDaysConfigRow" style="display:none; margin-bottom: 20px;">
+                <div style="margin-bottom: 15px;">
+                    <label for="FixedDays" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Max Entitlement Days</label>
+                    <input type="number" id="FixedDays" name="FixedDays" min="1" max="365" value="7" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
                 </div>
 
-                <div id="usageFrequencyRow" style="margin-top: 10px;">
-                    <label for="UsageFrequency">Usage Frequency</label>
-                    <select id="UsageFrequency" name="UsageFrequency">
+                <div id="usageFrequencyRow">
+                    <label for="UsageFrequency" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Usage Frequency</label>
+                    <select id="UsageFrequency" name="UsageFrequency" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: white; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
                         <option value="PerEvent">Per Event (e.g., Paternity, Calamity)</option>
                         <option value="PerYear" selected>Per Year (e.g., Special Privilege Leave)</option>
                     </select>
                 </div>
-                </div>
+            </div>
 
-            <div id="creditLeaveConfigRow">
-                <div id="pointCostRow">
-                    <label for="PointCost">Point Cost</label>
-                    <input type="number" id="PointCost" name="PointCost" min="0" step="1" value="0">
+            <!-- Credit Leave Config -->
+            <div id="creditLeaveConfigRow" style="margin-bottom: 20px;">
+                <div id="pointCostRow" style="margin-bottom: 15px;">
+                    <label for="PointCost" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Point Cost</label>
+                    <input type="number" id="PointCost" name="PointCost" min="0" step="1" value="0" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
                 </div>
                 <div id="deductFromRow">
-                    <label for="DeductFromLeaveTypeID">Deduct from Balance of:</label>
-                    <select id="DeductFromLeaveTypeID" name="DeductFromLeaveTypeID">
+                    <label for="DeductFromLeaveTypeID" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Deduct from Balance of:</label>
+                    <select id="DeductFromLeaveTypeID" name="DeductFromLeaveTypeID" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: white; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
                         <option value="" selected>New Balance</option>
                         <?php
                         if (isset($leaveTypes) && is_array($leaveTypes)) {
@@ -953,128 +1062,192 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                         ?>
                         <option>None</option>
                     </select>
-                    <small>e.g., Make "Emergency Leave" deduct from the "Vacation Leave" balance.</small>
+                    <small style="color: #666; font-size: 12px; margin-top: 4px; display: block;">e.g., Make "Emergency Leave" deduct from the "Vacation Leave" balance.</small>
                 </div>
             </div>
 
-            <div>
-                <label for="Description">Description</label>
-                <input id="Description" name="Description" rows="3"></input>
+            <!-- Description -->
+            <div style="margin-bottom: 20px;">
+                <label for="Description" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Description</label>
+                <textarea id="Description" name="Description" rows="3" placeholder="Enter leave type description" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; font-family: inherit; transition: all 0.3s ease; resize: vertical;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'"></textarea>
             </div>
-            <div>
-                <label for="AllowDocuments">Allow Documents</label>
-                <select id="AllowDocuments" name="AllowDocuments">
+
+            <!-- Allow Documents -->
+            <div style="margin-bottom: 20px;">
+                <label for="AllowDocuments" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Allow Documents</label>
+                <select id="AllowDocuments" name="AllowDocuments" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: white; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
                     <option value="0" selected>No</option>
                     <option value="1">Yes</option>
                 </select>
             </div>
-            <div id="maxDocumentsRow" style="display:none;">
-                <label for="MaxDocuments">Max Documents (1-10)</label>
-                <input type="number" id="MaxDocuments" name="MaxDocuments" min="1" max="10" value="1">
-            </div>
 
-            <div style="margin-top:10px;">
-                <button type="button" id="saveLeaveTypeBtn">Save</button>
-                <button type="button" id="cancelLeaveTypeBtn">Cancel</button>
+            <!-- Max Documents -->
+            <div id="maxDocumentsRow" style="display:none; margin-bottom: 20px;">
+                <label for="MaxDocuments" style="font-weight: 600; color: #0052CC; display: block; margin-bottom: 8px;">Max Documents (1-10)</label>
+                <input type="number" id="MaxDocuments" name="MaxDocuments" min="1" max="10" value="1" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
             </div>
         </form>
+
+        <!-- Modal Footer -->
+        <div style="display: flex; gap: 12px; justify-content: flex-end; padding: 20px 30px; border-top: 1px solid #e0e0e0; background: rgba(0, 82, 204, 0.02);">
+            <button type="button" id="cancelLeaveTypeBtn" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'; this.style.borderColor='#999'" onmouseout="this.style.background='#f0f0f0'; this.style.borderColor='#e0e0e0'">Cancel</button>
+            <button type="button" id="saveLeaveTypeBtn" style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">Save</button>
+        </div>
     </div>
 </div>
     <!-- Add Department Modal -->
-    <div id="addDepartmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeAddDepartmentModal">&times;</span>
-            <h3>Add Department</h3>
-            <form id="addDepartmentForm" method="POST" action="add_department.php">
-                <label>Department Name:</label>
-                <input type="text" name="department_name" required pattern="^[A-Za-z ]+$"
-                    title="Only letters and spaces are allowed">
-                <button type="submit">Add</button>
+    <div id="addDepartmentModal" class="modal" style="animation: fadeIn 0.3s ease;">
+        <div class="modal-content" style="max-width: 500px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+            <div style="background: #0052CC; padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">Add Department</h2>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Create a new department</p>
+                </div>
+                <span class="close" id="closeAddDepartmentModal" style="color: white; font-size: 32px; cursor: pointer; background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</span>
+            </div>
+            <form id="addDepartmentForm" method="POST" action="add_department.php" style="padding: 30px;">
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">🏢 Department Name <span style="color: #dc3545;">*</span></label>
+                    <input type="text" name="department_name" required pattern="^[A-Za-z ]+$" title="Only letters and spaces are allowed" placeholder="e.g., Human Resources" style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #e8e8e8;">
+                    <button type="button" onclick="document.getElementById('closeAddDepartmentModal').click()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Cancel</button>
+                    <button type="submit" style="background: #0052CC; color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">✓ Add Department</button>
+                </div>
             </form>
         </div>
     </div>
     <!-- Edit Department Modal -->
-    <div id="editDepartmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeEditDepartmentModal">&times;</span>
-            <h3>Edit Department</h3>
-            <form id="editDepartmentForm" method="POST" action="edit_department.php">
+    <div id="editDepartmentModal" class="modal" style="animation: fadeIn 0.3s ease;">
+        <div class="modal-content" style="max-width: 500px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+            <div style="background: #0052CC; padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">Edit Department</h2>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Update department information</p>
+                </div>
+                <span class="close" id="closeEditDepartmentModal" style="color: white; font-size: 32px; cursor: pointer; background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</span>
+            </div>
+            <form id="editDepartmentForm" method="POST" action="edit_department.php" style="padding: 30px;">
                 <input type="hidden" name="department_id" id="editDepartmentId">
-                <label>Department Name:</label>
-                <input type="text" name="department_name" id="editDepartmentName" required pattern="^[A-Za-z ]+$"
-                    title="Only letters and spaces are allowed">
-                <button type="submit">Save</button>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">🏢 Department Name <span style="color: #dc3545;">*</span></label>
+                    <input type="text" name="department_name" id="editDepartmentName" required pattern="^[A-Za-z ]+$" title="Only letters and spaces are allowed" placeholder="e.g., Human Resources" style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #e8e8e8;">
+                    <button type="button" onclick="document.getElementById('closeEditDepartmentModal').click()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Cancel</button>
+                    <button type="submit" style="background: #0052CC; color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">✓ Save Changes</button>
+                </div>
             </form>
         </div>
     </div>
     <!-- Delete Department Modal -->
-    <div id="deleteDepartmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeDeleteDepartmentModal">&times;</span>
-            <form id="deleteDepartmentForm" method="POST" action="delete_department.php">
+    <div id="deleteDepartmentModal" class="modal" style="animation: fadeIn 0.3s ease;">
+        <div class="modal-content" style="max-width: 450px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+            <div style="background: #dc3545; padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">Delete Department</h2>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">This action cannot be undone</p>
+                </div>
+                <span class="close" id="closeDeleteDepartmentModal" style="color: white; font-size: 32px; cursor: pointer; background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</span>
+            </div>
+            <form id="deleteDepartmentForm" method="POST" action="delete_department.php" style="padding: 30px;">
                 <input type="hidden" name="department_id" id="deleteDepartmentId">
-                <p>Are you sure you want to delete this department?</p>
-                <button type="submit">Yes, Delete</button>
+                <p style="font-size: 16px; color: #333; margin-bottom: 24px;">Are you sure you want to delete this department? This action cannot be undone.</p>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #e8e8e8;">
+                    <button type="button" onclick="document.getElementById('closeDeleteDepartmentModal').click()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Cancel</button>
+                    <button type="submit" style="background: #dc3545; color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(220, 53, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(220, 53, 69, 0.3)'">🗑️ Delete Department</button>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- Add Position Modal -->
-    <div id="addPositionModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeAddPositionModal">&times;</span>
-            <h3>Add Position</h3>
-            <form id="addPositionForm" method="POST" action="add_position.php">
-                <label>Department:</label>
-                <select name="department_id" id="addPositionDepartment" required>
-                    <option value="">Select Department</option>
-                    <?php
-                    include 'db_connect.php';
-                    $deptResult = $conn->query("SELECT DepartmentID, DepartmentName FROM Department");
-                    while ($row = $deptResult->fetch_assoc()) {
-                        echo '<option value="' . $row['DepartmentID'] . '">' . htmlspecialchars($row['DepartmentName']) . '</option>';
-                    }
-                    ?>
-                </select>
-                <label>Position Name:</label>
-                <input type="text" name="position_name" required pattern="^[A-Za-z ]+$"
-                    title="Only letters and spaces are allowed">
-                <button type="submit">Add</button>
+    <div id="addPositionModal" class="modal" style="animation: fadeIn 0.3s ease;">
+        <div class="modal-content" style="max-width: 500px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+            <div style="background: #0052CC; padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">Add Position</h2>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Create a new position</p>
+                </div>
+                <span class="close" id="closeAddPositionModal" style="color: white; font-size: 32px; cursor: pointer; background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</span>
+            </div>
+            <form id="addPositionForm" method="POST" action="add_position.php" style="padding: 30px;">
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">🏢 Department <span style="color: #dc3545;">*</span></label>
+                    <select name="department_id" id="addPositionDepartment" required style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background-color: white; transition: all 0.3s ease; cursor: pointer;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                        <option value="">-- Select Department --</option>
+                        <?php
+                        include 'db_connect.php';
+                        $deptResult = $conn->query("SELECT DepartmentID, DepartmentName FROM Department");
+                        while ($row = $deptResult->fetch_assoc()) {
+                            echo '<option value="' . $row['DepartmentID'] . '">' . htmlspecialchars($row['DepartmentName']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">👔 Position Name <span style="color: #dc3545;">*</span></label>
+                    <input type="text" name="position_name" required pattern="^[A-Za-z ]+$" title="Only letters and spaces are allowed" placeholder="e.g., Manager, Developer" style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #e8e8e8;">
+                    <button type="button" onclick="document.getElementById('closeAddPositionModal').click()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Cancel</button>
+                    <button type="submit" style="background: #0052CC; color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">✓ Add Position</button>
+                </div>
             </form>
         </div>
     </div>
     <!-- Edit Position Modal -->
-    <div id="editPositionModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeEditPositionModal">&times;</span>
-            <h3>Edit Position</h3>
-            <form id="editPositionForm" method="POST" action="edit_position.php">
+    <div id="editPositionModal" class="modal" style="animation: fadeIn 0.3s ease;">
+        <div class="modal-content" style="max-width: 500px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+            <div style="background: #0052CC; padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">Edit Position</h2>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Update position information</p>
+                </div>
+                <span class="close" id="closeEditPositionModal" style="color: white; font-size: 32px; cursor: pointer; background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</span>
+            </div>
+            <form id="editPositionForm" method="POST" action="edit_position.php" style="padding: 30px;">
                 <input type="hidden" name="position_id" id="editPositionId">
-                <label>Department:</label>
-                <select name="department_id" id="editPositionDepartment" required>
-                    <option value="">Select Department</option>
-                    <?php
-                    $deptResult = $conn->query("SELECT DepartmentID, DepartmentName FROM Department");
-                    while ($row = $deptResult->fetch_assoc()) {
-                        echo '<option value="' . $row['DepartmentID'] . '">' . htmlspecialchars($row['DepartmentName']) . '</option>';
-                    }
-                    ?>
-                </select>
-                <label>Position Name:</label>
-                <input type="text" name="position_name" id="editPositionName" required pattern="^[A-Za-z ]+$"
-                    title="Only letters and spaces are allowed">
-                <button type="submit">Save</button>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">🏢 Department <span style="color: #dc3545;">*</span></label>
+                    <select name="department_id" id="editPositionDepartment" required style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background-color: white; transition: all 0.3s ease; cursor: pointer;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                        <option value="">-- Select Department --</option>
+                        <?php
+                        $deptResult = $conn->query("SELECT DepartmentID, DepartmentName FROM Department");
+                        while ($row = $deptResult->fetch_assoc()) {
+                            echo '<option value="' . $row['DepartmentID'] . '">' . htmlspecialchars($row['DepartmentName']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">👔 Position Name <span style="color: #dc3545;">*</span></label>
+                    <input type="text" name="position_name" id="editPositionName" required pattern="^[A-Za-z ]+$" title="Only letters and spaces are allowed" placeholder="e.g., Manager, Developer" style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #e8e8e8;">
+                    <button type="button" onclick="document.getElementById('closeEditPositionModal').click()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Cancel</button>
+                    <button type="submit" style="background: #0052CC; color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">✓ Save Changes</button>
+                </div>
             </form>
         </div>
     </div>
     <!-- Delete Position Modal -->
-    <div id="deletePositionModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeDeletePositionModal">&times;</span>
-            <form id="deletePositionForm" method="POST" action="delete_position.php">
+    <div id="deletePositionModal" class="modal" style="animation: fadeIn 0.3s ease;">
+        <div class="modal-content" style="max-width: 450px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+            <div style="background: #dc3545; padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">Delete Position</h2>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">This action cannot be undone</p>
+                </div>
+                <span class="close" id="closeDeletePositionModal" style="color: white; font-size: 32px; cursor: pointer; background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</span>
+            </div>
+            <form id="deletePositionForm" method="POST" action="delete_position.php" style="padding: 30px;">
                 <input type="hidden" name="position_id" id="deletePositionId">
-                <p>Are you sure you want to delete this position?</p>
-                <button type="submit">Yes, Delete</button>
+                <p style="font-size: 16px; color: #333; margin-bottom: 24px;">Are you sure you want to delete this position? This action cannot be undone.</p>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #e8e8e8;">
+                    <button type="button" onclick="document.getElementById('closeDeletePositionModal').click()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'" onmouseout="this.style.background='#f0f0f0'">Cancel</button>
+                    <button type="submit" style="background: #dc3545; color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(220, 53, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(220, 53, 69, 0.3)'">🗑️ Delete Position</button>
+                </div>
             </form>
         </div>
     </div>
@@ -1202,7 +1375,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
         }
         .cs-credits-table thead th {
             font-weight: bold;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             font-size: 9px;
             color: #000;
         }
@@ -1210,7 +1383,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
             text-align: left;
             font-weight: bold;
             font-size: 9px;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             padding-left: 5px;
             color: #000;
         }
@@ -1369,9 +1542,190 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
         <button type="button" id="cancelLeaveDetailsBtn">Close</button>
     </div>
 </div>
+
+<!-- View Travel Order Details Modal -->
+<div id="viewtravelDetailsModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 900px; padding: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 82, 204, 0.15);">
+        <!-- Modal Header -->
+        <div style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); padding: 20px 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="margin: 0; font-size: 22px; font-weight: 600;">Travel Order Details</h2>
+            <span class="close-view-modal" id="closeTravelDetailsModal" style="color: white; font-size: 28px; cursor: pointer; font-weight: 300;">&times;</span>
+        </div>
+
+        <!-- Modal Body - Content Loaded via AJAX -->
+        <div id="travelDetailsContent" style="padding: 30px; max-height: 70vh; overflow-y: auto;">
+            <p style="text-align: center; color: #999;">Loading travel order details...</p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div style="display: flex; gap: 12px; justify-content: flex-end; padding: 20px 30px; border-top: 1px solid #e0e0e0; background: rgba(0, 82, 204, 0.02);">
+            <button type="button" id="downloadTravelPdfBtn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(40, 167, 69, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(40, 167, 69, 0.3)'">
+                <i class="fas fa-download"></i> Download PDF
+            </button>
+            <button type="button" id="cancelTravelDetailsBtn" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'; this.style.borderColor='#999'" onmouseout="this.style.background='#f0f0f0'; this.style.borderColor='#e0e0e0'">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Travel Modal -->
+<div id="assignTravelModal" style="display: none !important; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9999; justify-content: center; align-items: center; animation: fadeIn 0.3s ease;">
+    <div style="background: white; width: 95%; max-width: 650px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; animation: slideUp 0.3s ease;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2 style="margin: 0; font-size: 26px; font-weight: 700;">Assign Travel Order</h2>
+                <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Create a new travel directive for an employee</p>
+            </div>
+            <button type="button" onclick="closeAssignTravelModal()" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; font-size: 32px; cursor: pointer; padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</button>
+        </div>
+
+        <!-- Form -->
+        <form id="assignTravelForm" style="padding: 30px;">
+            <!-- Employee -->
+            <div style="margin-bottom: 22px;">
+                <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">👤 Select Employee <span style="color: #dc3545;">*</span></label>
+                <select id="assignTravelEmployee" required style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; background-color: white; transition: all 0.3s ease; cursor: pointer;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                    <option value="">-- Select an Employee --</option>
+                </select>
+            </div>
+
+            <!-- Destination -->
+            <div style="margin-bottom: 22px;">
+                <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">📍 Destination <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="assignTravelDestination" required placeholder="e.g., Manila, Cebu, Bangkok" style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+            </div>
+
+            <!-- Purpose -->
+            <div style="margin-bottom: 22px;">
+                <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">📝 Purpose <span style="color: #dc3545;">*</span></label>
+                <textarea id="assignTravelPurpose" required placeholder="Enter the purpose of travel (e.g., Conference, Training, Meeting)" rows="3" style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: inherit; resize: vertical; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'"></textarea>
+            </div>
+
+            <!-- Dates Row -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <!-- Start Date -->
+                <div style="margin-bottom: 22px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">📅 Start Date <span style="color: #dc3545;">*</span></label>
+                    <input type="date" id="assignTravelStartDate" required style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                </div>
+
+                <!-- End Date -->
+                <div style="margin-bottom: 22px;">
+                    <label style="display: block; font-weight: 700; color: #0052CC; margin-bottom: 8px; font-size: 15px;">📅 End Date <span style="color: #dc3545;">*</span></label>
+                    <input type="date" id="assignTravelEndDate" required style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: all 0.3s ease;" onfocus="this.style.borderColor='#0052CC'; this.style.boxShadow='0 0 0 3px rgba(0, 82, 204, 0.1)'" onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'">
+                </div>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div style="display: flex; gap: 12px; justify-content: flex-end; padding: 24px 30px; border-top: 1px solid #e8e8e8; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+            <button type="button" onclick="closeAssignTravelModal()" style="background: #f0f0f0; color: #333; padding: 12px 28px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'; this.style.borderColor='#999'" onmouseout="this.style.background='#f0f0f0'; this.style.borderColor='#e0e0e0'">Cancel</button>
+            <button type="button" onclick="submitAssignTravel()" style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">✓ Assign Travel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // ===== ASSIGN TRAVEL MODAL FUNCTIONS =====
+    // Close Assign Travel modal
+    function closeAssignTravelModal() {
+        const modal = document.getElementById('assignTravelModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Open Assign Travel modal
+    function openAssignTravelModal() {
+        console.log('Opening assign travel modal');
+        const modal = document.getElementById('assignTravelModal');
+        const form = document.getElementById('assignTravelForm');
+        
+        console.log('Modal element:', modal);
+        
+        if (form) form.reset();
+        if (typeof loadEmployeesForAssignTravel === 'function') {
+            loadEmployeesForAssignTravel();
+        }
+        
+        if (modal) {
+            // Remove all display-related styles and set flex
+            modal.style.removeProperty('display');
+            modal.style.display = 'flex !important';
+            modal.style.visibility = 'visible';
+            modal.style.opacity = '1';
+            console.log('Modal display set to flex');
+            console.log('Modal computed style:', window.getComputedStyle(modal).display);
+        } else {
+            console.error('Modal not found!');
+        }
+    }
+
+    // Submit Assign Travel form
+    function submitAssignTravel() {
+        const employeeId = document.getElementById('assignTravelEmployee').value;
+        const destination = document.getElementById('assignTravelDestination').value;
+        const purpose = document.getElementById('assignTravelPurpose').value;
+        const startDate = document.getElementById('assignTravelStartDate').value;
+        const endDate = document.getElementById('assignTravelEndDate').value;
+
+        // Validation
+        if (!employeeId || !destination || !purpose || !startDate || !endDate) {
+            Swal.fire('Error', 'Please fill in all fields', 'error');
+            return;
+        }
+
+        // Submit
+        const formData = new FormData();
+        formData.append('employee_id', employeeId);
+        formData.append('destination', destination);
+        formData.append('purpose', purpose);
+        formData.append('start_date', startDate);
+        formData.append('end_date', endDate);
+
+        fetch('assign_travel.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire('Success!', 'Travel order assigned successfully.', 'success').then(() => {
+                    closeAssignTravelModal();
+                    if (typeof loadManageTravelOrders === 'function') {
+                        loadManageTravelOrders();
+                    }
+                });
+            } else {
+                Swal.fire('Error', data.error || 'Failed to assign travel', 'error');
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            Swal.fire('Error', 'An error occurred', 'error');
+        });
+    }
+
     // ===== GLOBAL SEARCH FUNCTIONS (defined before DOMContentLoaded) =====
     // These must be defined early so they can be called from HTML onclick handlers
     
@@ -1496,6 +1850,113 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
         });
     }
 
+    // ===== GLOBAL MODAL CLOSE FUNCTIONS =====
+    // These must be in global scope to be called from onclick handlers
+    
+    function closeEmployeeModal() {
+        const overlay = document.getElementById('employeeModalOverlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+
+    function closeLeaveDetailsModal() {
+        const detailsModal = document.getElementById('viewLeaveDetailsModal');
+        if (detailsModal) {
+            detailsModal.style.display = 'none';
+        }
+    }
+
+    // ===== VIEW LEAVE APPLICATION FROM HISTORY =====
+    function viewLeaveApplicationFromHistory(appId) {
+        const detailsModal = document.getElementById('viewLeaveDetailsModal');
+        if (!detailsModal) {
+            console.error('Leave details modal not found');
+            return;
+        }
+        
+        // Show modal
+        detailsModal.style.display = 'block';
+        
+        // Set loading state
+        document.getElementById('form-department').textContent = 'Loading...';
+        document.getElementById('form-name').textContent = 'Loading...';
+        document.getElementById('form-date-filing').textContent = 'Loading...';
+        document.getElementById('form-position').textContent = 'Loading...';
+        document.getElementById('form-salary').textContent = 'Loading...';
+        document.getElementById('form-leave-type').innerHTML = '';
+        document.getElementById('form-leave-details').innerHTML = '';
+        document.getElementById('form-duration').textContent = '';
+        document.getElementById('form-dates').textContent = '';
+        document.getElementById('form-reason').textContent = '';
+        document.getElementById('form-approval-days').textContent = '';
+        document.getElementById('form-disapproval-reason').textContent = '';
+        document.getElementById('form-recommendation').innerHTML = 
+            `<span class="cs-checkbox">[ ]</span> For approval<br>
+             <span class="cs-checkbox">[ ]</span> For disapproval due to...`;
+        
+        // Fetch application details
+        fetch('get_application_details_admin.php?id=' + encodeURIComponent(appId))
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    detailsModal.style.display = 'none';
+                    return;
+                }
+                
+                // Populate form fields
+                document.getElementById('form-department').textContent = data.Department || 'N/A';
+                document.getElementById('form-name').textContent = 
+                    `${data.LastName || ''}, ${data.FirstName || ''} ${data.MiddleName || ''}`;
+                document.getElementById('form-date-filing').textContent = data.DateRequestedFormatted || 'N/A';
+                document.getElementById('form-position').textContent = data.Position || 'N/A';
+                document.getElementById('form-salary').textContent = data.Salary ? `₱${parseFloat(data.Salary).toLocaleString()}` : 'N/A';
+                
+                // Leave type
+                document.getElementById('form-leave-type').innerHTML = 
+                    `<span class="cs-checkbox">[X]</span> ${data.TypeName}`;
+                
+                // Leave details
+                let details = data.Reason;
+                if (data.TypeName === 'Sick Leave') {
+                    details = `<span class="cs-checkbox">[ ]</span> In Hospital<br>
+                             <span class="cs-checkbox">[X]</span> Out Patient: ${data.Reason}`;
+                } else if (data.TypeName === 'Vacation Leave') {
+                    details = `<span class="cs-checkbox">[X]</span> Within Philippines<br>
+                             <span class="cs-checkbox">[ ]</span> Abroad (Specify):`;
+                }
+                document.getElementById('form-leave-details').innerHTML = details;
+                
+                // Duration and dates
+                document.getElementById('form-duration').textContent = `${data.DurationDays} day(s)`;
+                document.getElementById('form-dates').textContent = `${data.StartDate} to ${data.EndDate}`;
+                
+                // Reason
+                document.getElementById('form-reason').textContent = data.Reason || 'No reason provided.';
+                
+                // Status
+                if (data.Status === 'Approved') {
+                    document.getElementById('form-recommendation').innerHTML = 
+                        `<span class="cs-checkbox">[X]</span> For approval`;
+                    document.getElementById('form-approval-days').textContent = `${data.DurationDays} day(s) with pay`;
+                } else if (data.Status === 'Rejected') {
+                    document.getElementById('form-recommendation').innerHTML = 
+                        `<span class="cs-checkbox">[X]</span> For disapproval due to: ${data.RejectionReason || ''}`;
+                    document.getElementById('form-disapproval-reason').textContent = data.RejectionReason || 'See 7.B';
+                } else {
+                    document.getElementById('form-recommendation').innerHTML = 
+                        `<span class="cs-checkbox">[ ]</span> For approval<br>
+                         <span class="cs-checkbox">[ ]</span> For disapproval due to...`;
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching leave details:', err);
+                alert('A network error occurred.');
+                detailsModal.style.display = 'none';
+            });
+    }
+
     // ===== WIZARD NAVIGATION VARIABLES AND FUNCTIONS =====
     let currentStep = 1;
     const totalSteps = 3;
@@ -1534,18 +1995,36 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
             }
             
             if (emptyFields.length > 0) {
-                alert('Please fill in all required fields:\n• ' + emptyFields.join('\n• '));
+                Swal.fire({
+                    title: 'Missing Fields',
+                    html: '<strong>Please fill in all required fields:</strong><br><br>' + emptyFields.map(f => '• ' + f).join('<br>'),
+                    icon: 'warning',
+                    confirmButtonColor: '#0052CC',
+                    confirmButtonText: 'OK'
+                });
                 console.log('Empty fields:', emptyFields);
                 return;
             }
             
             if (invalidEmail) {
-                alert('Please enter a valid email address (e.g., user@example.com)');
+                Swal.fire({
+                    title: 'Invalid Email',
+                    text: 'Please enter a valid email address (e.g., user@example.com)',
+                    icon: 'warning',
+                    confirmButtonColor: '#0052CC',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
             
             if (invalidPhoneFields.length > 0) {
-                alert('Invalid phone number format:\n• ' + invalidPhoneFields.join('\n• '));
+                Swal.fire({
+                    title: 'Invalid Phone Number',
+                    html: '<strong>Invalid phone number format:</strong><br><br>' + invalidPhoneFields.map(f => '• ' + f).join('<br>'),
+                    icon: 'warning',
+                    confirmButtonColor: '#0052CC',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
         }
@@ -1638,6 +2117,43 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
         if (typeof loadEmployees === 'function') {
             loadEmployees();
         }
+        
+        // ===== DEPARTMENT EDIT/DELETE EVENT LISTENERS =====
+        document.addEventListener('click', function(e) {
+            // Edit Department
+            if (e.target.classList.contains('edit-department-btn')) {
+                const deptId = e.target.getAttribute('data-id');
+                const deptName = e.target.getAttribute('data-name');
+                document.getElementById('editDepartmentId').value = deptId;
+                document.getElementById('editDepartmentName').value = deptName;
+                document.getElementById('editDepartmentModal').style.display = 'flex';
+            }
+            
+            // Delete Department
+            if (e.target.classList.contains('delete-department-btn')) {
+                const deptId = e.target.getAttribute('data-id');
+                document.getElementById('deleteDepartmentId').value = deptId;
+                document.getElementById('deleteDepartmentModal').style.display = 'flex';
+            }
+            
+            // Edit Position
+            if (e.target.classList.contains('edit-position-btn')) {
+                const posId = e.target.getAttribute('data-id');
+                const posName = e.target.getAttribute('data-name');
+                const deptId = e.target.getAttribute('data-dept');
+                document.getElementById('editPositionId').value = posId;
+                document.getElementById('editPositionName').value = posName;
+                document.getElementById('editPositionDepartment').value = deptId;
+                document.getElementById('editPositionModal').style.display = 'flex';
+            }
+            
+            // Delete Position
+            if (e.target.classList.contains('delete-position-btn')) {
+                const posId = e.target.getAttribute('data-id');
+                document.getElementById('deletePositionId').value = posId;
+                document.getElementById('deletePositionModal').style.display = 'flex';
+            }
+        });
         
         // Dashboard data
         fetch('fetch_dashboard_data.php')
@@ -2163,7 +2679,13 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
         window.updateLeaveTypeTable = function () {
             fetch('fetch_leave_types_admin.php').then(res => res.text()).then(html => {
                 const tbody = document.querySelector('#manage-leave-section tbody');
-                if (tbody) tbody.innerHTML = html;
+                if (tbody) {
+                    tbody.innerHTML = html;
+                    // Re-attach event listeners to new buttons
+                    if (typeof attachLeaveTypeButtonListeners === 'function') {
+                        attachLeaveTypeButtonListeners();
+                    }
+                }
             }).catch(err => console.error('Failed to update leave type table', err));
         };
 
@@ -2383,18 +2905,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                                 // Close modal
                                 const modal = document.getElementById('addEmployeeModal');
                                 if (modal) modal.style.display = 'none';
-                                
-                                // Reset wizard
-                                currentStep = 1;
-                                updateWizardDisplay();
-                                
-                                // Reset form
-                                addEmployeeWizardForm.reset();
-                                
-                                // Update employee table
-                                if (typeof updateEmployeeTable === 'function') {
-                                    updateEmployeeTable();
-                                }
+                                updateEmployeeTable();
                                 
                                 // Navigate to admin dashboard
                                 const dashboardSection = document.getElementById('dashboard-section');
@@ -2499,22 +3010,66 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                 if (restoreBtn) {
                     const id = restoreBtn.dataset.id;
                     if (!id) return;
-                    if (!confirm('Restore this employee?')) return;
-                    fetch('restore_employee.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'EmployeeID=' + encodeURIComponent(id)
-                    })
-                        .then(r => r.json())
-                        .then(resp => {
-                            if (resp.success) {
-                                updateEmployeeTable();
-                                updateArchivedTable();
-                            } else {
-                                alert(resp.error || 'Failed to restore employee');
-                            }
-                        })
-                        .catch(() => alert('Network error'));
+                    Swal.fire({
+                        title: 'Restore Employee?',
+                        text: 'Are you sure you want to restore this employee?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28a745',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, Restore',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Restoring...',
+                                html: 'Please wait while we restore the employee.',
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            fetch('restore_employee.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: 'EmployeeID=' + encodeURIComponent(id)
+                            })
+                                .then(r => r.json())
+                                .then(resp => {
+                                    if (resp.success) {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Employee has been restored successfully.',
+                                            icon: 'success',
+                                            confirmButtonColor: '#28a745',
+                                            confirmButtonText: 'OK'
+                                        }).then(() => {
+                                            updateEmployeeTable();
+                                            updateArchivedTable();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: resp.error || 'Failed to restore employee',
+                                            icon: 'error',
+                                            confirmButtonColor: '#dc3545',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    }
+                                })
+                                .catch(() => {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Network error occurred',
+                                        icon: 'error',
+                                        confirmButtonColor: '#dc3545',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                        }
+                    });
                     return;
                 }
 
@@ -2522,21 +3077,65 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
                 if (deleteBtn) {
                     const id = deleteBtn.dataset.id;
                     if (!id) return;
-                    if (!confirm('Permanently delete archived employee?')) return;
-                    fetch('delete_employee.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'EmployeeID=' + encodeURIComponent(id)
-                    })
-                        .then(r => r.json())
-                        .then(resp => {
-                            if (resp.success) {
-                                updateArchivedTable();
-                            } else {
-                                alert(resp.error || 'Failed to delete archived employee');
-                            }
-                        })
-                        .catch(() => alert('Network error'));
+                    Swal.fire({
+                        title: 'Delete Employee?',
+                        text: 'Are you sure you want to permanently delete this archived employee? This action cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, Delete',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Deleting...',
+                                html: 'Please wait while we delete the employee.',
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            fetch('delete_employee.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: 'EmployeeID=' + encodeURIComponent(id)
+                            })
+                                .then(r => r.json())
+                                .then(resp => {
+                                    if (resp.success) {
+                                        Swal.fire({
+                                            title: 'Deleted!',
+                                            text: 'Employee has been permanently deleted.',
+                                            icon: 'success',
+                                            confirmButtonColor: '#28a745',
+                                            confirmButtonText: 'OK'
+                                        }).then(() => {
+                                            updateArchivedTable();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: resp.error || 'Failed to delete archived employee',
+                                            icon: 'error',
+                                            confirmButtonColor: '#dc3545',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    }
+                                })
+                                .catch(() => {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Network error occurred',
+                                        icon: 'error',
+                                        confirmButtonColor: '#dc3545',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                        }
+                    });
                 }
             }, false);
 
@@ -2659,6 +3258,137 @@ if (openCreateLeaveTypeBtn) {
     });
 }
 
+        // --- Function to attach event listeners to leave type action buttons ---
+        function attachLeaveTypeButtonListeners() {
+            // Edit button listeners
+            document.querySelectorAll(".edit-btn").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    if (!id) {
+                        console.error('No leave type ID found');
+                        return;
+                    }
+
+                    // Fetch leave type details from server
+                    fetch('get_leave_type.php?id=' + encodeURIComponent(id))
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.error || 'Failed to load leave type details',
+                                    icon: 'error',
+                                    confirmButtonColor: '#dc3545',
+                                    confirmButtonText: 'OK'
+                                });
+                                return;
+                            }
+
+                            if (modalTitle) modalTitle.innerText = "Edit Leave Type";
+                            if (form) form.action = "save_leave_type.php";
+                            if (saveBtn) saveBtn.innerText = "Save";
+
+                            // Populate all fields from fetched data
+                            if (leaveTypeIdInput) leaveTypeIdInput.value = data.LeaveTypeID || "";
+                            if (typeNameInput) typeNameInput.value = data.TypeName || "";
+                            if (descriptionInput) descriptionInput.value = data.Description || "";
+                            if (pointCostInput) pointCostInput.value = data.PointCost || 0;
+                            if (unitTypeSelect) unitTypeSelect.value = data.UnitType || "Leave Credit";
+                            if (fixedDaysInput) fixedDaysInput.value = data.MaxDaysPerUsage || 7;
+                            if (allowDocsSelect) allowDocsSelect.value = data.AllowDocuments || "0";
+                            if (maxDocsInput) maxDocsInput.value = data.MaxDocuments || 1;
+
+                            // Trigger change events to show/hide rows based on populated data
+                            updateConditionalRows();
+                            updateMaxDocsRow();
+
+                            if (leaveTypeModal) leaveTypeModal.style.display = "block";
+                        })
+                        .catch(err => {
+                            console.error('Failed to fetch leave type', err);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Network error while loading leave type details',
+                                icon: 'error',
+                                confirmButtonColor: '#dc3545',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                });
+            });
+
+            // Delete button listeners
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    Swal.fire({
+                        title: 'Delete Leave Type?',
+                        text: 'Are you sure you want to delete this leave type? This action cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, Delete',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Deleting...',
+                                html: 'Please wait while we delete the leave type.',
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            fetch("delete_leave_type.php", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                body: "id=" + encodeURIComponent(id)
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            title: 'Deleted!',
+                                            text: 'Leave type has been deleted successfully.',
+                                            icon: 'success',
+                                            confirmButtonColor: '#28a745',
+                                            confirmButtonText: 'OK'
+                                        }).then(() => {
+                                            if (typeof updateLeaveTypeTable === 'function') {
+                                                updateLeaveTypeTable();
+                                            } else {
+                                                location.reload();
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: data.error || "Error deleting leave type.",
+                                            icon: 'error',
+                                            confirmButtonColor: '#dc3545',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error('Delete leave type failed', err);
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Network error occurred',
+                                        icon: 'error',
+                                        confirmButtonColor: '#dc3545',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                        }
+                    });
+                });
+            });
+        }
+
         if (saveBtn && form) {
             saveBtn.addEventListener('click', function () {
                 try {
@@ -2688,33 +3418,6 @@ if (openCreateLeaveTypeBtn) {
             });
         }
 
-        // --- Open Modal for EDIT ---
-        document.querySelectorAll(".edit-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const data = this.dataset;
-
-                if (modalTitle) modalTitle.innerText = "Edit Leave Type";
-                if (form) form.action = "save_leave_type.php";
-                if (saveBtn) saveBtn.innerText = "Save";
-
-                // Populate all fields from data attributes
-                if (leaveTypeIdInput) leaveTypeIdInput.value = data.id || "";
-                if (typeNameInput) typeNameInput.value = data.name || "";
-                if (descriptionInput) descriptionInput.value = data.description || "";
-                if (pointCostInput) pointCostInput.value = data.pointCost || 0;
-                if (unitTypeSelect) unitTypeSelect.value = data.unitType || "Leave Credit";
-                if (fixedDaysInput) fixedDaysInput.value = data.fixedDays || 7;
-                if (allowDocsSelect) allowDocsSelect.value = data.allowDocs || "0";
-                if (maxDocsInput) maxDocsInput.value = data.maxDocs || 1;
-
-                // Trigger change events to show/hide rows based on populated data
-                updateConditionalRows(); // **UPDATED**
-                updateMaxDocsRow();
-
-                if (leaveTypeModal) leaveTypeModal.style.display = "block";
-            });
-        });
-
         // --- Close Modal ---
         const closeLeaveTypeModalBtn = document.getElementById("closeLeaveTypeModal");
         const cancelLeaveTypeBtn = document.getElementById("cancelLeaveTypeBtn");
@@ -2730,31 +3433,8 @@ if (openCreateLeaveTypeBtn) {
             cancelLeaveTypeBtn.addEventListener("click", closeTheModal);
         }
 
-        // --- Delete Leave Type (Unchanged) ---
-        document.querySelectorAll(".delete-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const id = this.dataset.id;
-                if (!confirm("Are you sure you want to delete this leave type?")) return;
-                fetch("delete_leave_type.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: "id=" + encodeURIComponent(id)
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            if (typeof updateLeaveTypeTable === 'function') {
-                                updateLeaveTypeTable();
-                            } else {
-                                location.reload();
-                            }
-                        } else {
-                            alert(data.error || "Error deleting leave type.");
-                        }
-                    })
-                    .catch(err => console.error('Delete leave type failed', err));
-            });
-        });
+        // --- Attach listeners on page load ---
+        attachLeaveTypeButtonListeners();
 
         // --- Other Admin Area Leave Select (Unchanged) ---
         const leaveTypeSelect = document.getElementById('leaveTypeSelect');
@@ -3072,11 +3752,19 @@ function populateHistoryTable(historyItems) {
                     </span>
                 </td>
                 <td>
-                <button>View</button>
+                <button class="view-history-btn" data-id="${item.ApplicationID}">View</button>
                 </td>
             </tr>
         `;
         historyTableBody.innerHTML += row;
+    });
+    
+    // Add event listener for View buttons in history table
+    document.querySelectorAll('.view-history-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const appId = this.getAttribute('data-id');
+            viewLeaveApplicationFromHistory(appId);
+        });
     });
 }
 
@@ -3720,68 +4408,75 @@ fetchLeaveHistory();
     // Function to show employee details in a modal
     function showEmployeeModal(employee) {
         const modalContent = `
-            <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); padding: 0; border-radius: 16px; max-width: 800px; width: 90%; margin: 20px auto; max-height: 90vh; overflow-y: auto; position: relative; z-index: 1001; box-shadow: 0 20px 60px rgba(0, 82, 204, 0.15); border: 1px solid rgba(0, 82, 204, 0.1);">
-                <!-- Header with gradient -->
-                <div style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); padding: 30px; border-radius: 16px 16px 0 0; position: sticky; top: 0; z-index: 10;">
-                    <div style="display: flex; align-items: center; gap: 20px;">
-                        <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 40px; color: white; border: 3px solid rgba(255,255,255,0.3);">
+            <div style="background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); padding: 0; border-radius: 20px; max-width: 900px; width: 95%; margin: 20px auto; max-height: 90vh; overflow-y: auto; position: relative; z-index: 1001; box-shadow: 0 25px 80px rgba(0, 82, 204, 0.2); border: 1px solid rgba(0, 82, 204, 0.1);">
+                <!-- Header with gradient and profile section -->
+                <div style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); padding: 40px 30px; border-radius: 20px 20px 0 0; position: sticky; top: 0; z-index: 10;">
+                    <div style="display: flex; align-items: center; gap: 25px;">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 50px; color: white; border: 4px solid rgba(255,255,255,0.4); box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
                             👤
                         </div>
-                        <div style="color: white;">
-                            <h2 style="margin: 0; font-size: 28px; font-weight: 600;">${employee.FirstName} ${employee.LastName}</h2>
-                            <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">${employee.PositionName || 'Position'} • ${employee.DepartmentName || 'Department'}</p>
+                        <div style="color: white; flex: 1;">
+                            <h2 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">${employee.FirstName} ${employee.LastName}</h2>
+                            <p style="margin: 12px 0 0 0; font-size: 15px; opacity: 0.95; font-weight: 500;">${employee.PositionName || 'Position'}</p>
+                            <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.85;">${employee.DepartmentName || 'Department'}</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Content sections -->
-                <div style="padding: 30px;">
-                    <!-- Personal Information -->
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #0052CC; font-size: 16px; font-weight: 600; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">Personal Information</h3>
+                <!-- Content sections with improved spacing -->
+                <div style="padding: 40px 30px;">
+                    <!-- Personal Information Section -->
+                    <div style="margin-bottom: 40px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                            <div style="width: 4px; height: 24px; background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); border-radius: 2px;"></div>
+                            <h3 style="color: #0052CC; font-size: 18px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Personal Information</h3>
+                        </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div style="background: rgba(0, 82, 204, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #0052CC;">
-                                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase;">Email</p>
-                                <p style="margin: 0; font-size: 14px; color: #333; word-break: break-all;">${employee.Email || 'N/A'}</p>
+                            <div style="background: linear-gradient(135deg, rgba(0, 82, 204, 0.08) 0%, rgba(0, 82, 204, 0.02) 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #0052CC; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);">
+                                <p style="margin: 0 0 8px 0; font-size: 11px; color: #0052CC; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Email</p>
+                                <p style="margin: 0; font-size: 15px; color: #333; word-break: break-all; font-weight: 500;">${employee.Email || 'N/A'}</p>
                             </div>
-                            <div style="background: rgba(0, 82, 204, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #0052CC;">
-                                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase;">Phone</p>
-                                <p style="margin: 0; font-size: 14px; color: #333;">${employee.ContactNo || 'N/A'}</p>
+                            <div style="background: linear-gradient(135deg, rgba(0, 82, 204, 0.08) 0%, rgba(0, 82, 204, 0.02) 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #0052CC; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);">
+                                <p style="margin: 0 0 8px 0; font-size: 11px; color: #0052CC; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Phone</p>
+                                <p style="margin: 0; font-size: 15px; color: #333; font-weight: 500;">${employee.ContactNo || 'N/A'}</p>
                             </div>
-                            <div style="background: rgba(0, 82, 204, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #0052CC;">
-                                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase;">Birthdate</p>
-                                <p style="margin: 0; font-size: 14px; color: #333;">${employee.Birthdate || 'N/A'}</p>
+                            <div style="background: linear-gradient(135deg, rgba(0, 82, 204, 0.08) 0%, rgba(0, 82, 204, 0.02) 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #0052CC; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);">
+                                <p style="margin: 0 0 8px 0; font-size: 11px; color: #0052CC; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Birthdate</p>
+                                <p style="margin: 0; font-size: 15px; color: #333; font-weight: 500;">${employee.Birthdate || 'N/A'}</p>
                             </div>
-                            <div style="background: rgba(0, 82, 204, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #0052CC;">
-                                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase;">Age</p>
-                                <p style="margin: 0; font-size: 14px; color: #333;">${employee.Age || 'N/A'} years</p>
+                            <div style="background: linear-gradient(135deg, rgba(0, 82, 204, 0.08) 0%, rgba(0, 82, 204, 0.02) 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #0052CC; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);">
+                                <p style="margin: 0 0 8px 0; font-size: 11px; color: #0052CC; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Age</p>
+                                <p style="margin: 0; font-size: 15px; color: #333; font-weight: 500;">${employee.Age || 'N/A'} years</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Employment Information -->
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #0052CC; font-size: 16px; font-weight: 600; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 0.5px;">Employment Information</h3>
+                    <!-- Employment Information Section -->
+                    <div style="margin-bottom: 40px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                            <div style="width: 4px; height: 24px; background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); border-radius: 2px;"></div>
+                            <h3 style="color: #4CAF50; font-size: 18px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Employment Information</h3>
+                        </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div style="background: rgba(76, 175, 80, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #4CAF50;">
-                                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase;">Status</p>
-                                <p style="margin: 0; font-size: 14px; color: #333;">
-                                    <span style="display: inline-block; background: #4CAF50; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            <div style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(76, 175, 80, 0.02) 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #4CAF50; box-shadow: 0 2px 8px rgba(76, 175, 80, 0.08);">
+                                <p style="margin: 0 0 8px 0; font-size: 11px; color: #4CAF50; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Status</p>
+                                <p style="margin: 0; font-size: 15px; color: #333;">
+                                    <span style="display: inline-block; background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; padding: 6px 16px; border-radius: 25px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);">
                                         ${employee.Status || 'N/A'}
                                     </span>
                                 </p>
                             </div>
-                            <div style="background: rgba(33, 150, 243, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #2196F3;">
-                                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; font-weight: 600; text-transform: uppercase;">Date Hired</p>
-                                <p style="margin: 0; font-size: 14px; color: #333;">${employee.DateHired || 'N/A'}</p>
+                            <div style="background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(33, 150, 243, 0.02) 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #2196F3; box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);">
+                                <p style="margin: 0 0 8px 0; font-size: 11px; color: #2196F3; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Date Hired</p>
+                                <p style="margin: 0; font-size: 15px; color: #333; font-weight: 500;">${employee.DateHired || 'N/A'}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Footer with close button -->
-                <div style="display: flex; gap: 12px; justify-content: flex-end; padding: 20px 30px; border-top: 1px solid rgba(0, 82, 204, 0.1); background: rgba(0, 82, 204, 0.02); position: sticky; bottom: 0; z-index: 10;">
-                    <button type="button" onclick="closeEmployeeModal()" style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); color: white; padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">Close</button>
+                <div style="display: flex; gap: 12px; justify-content: flex-end; padding: 25px 30px; border-top: 2px solid rgba(0, 82, 204, 0.1); background: linear-gradient(135deg, rgba(0, 82, 204, 0.03) 0%, rgba(0, 82, 204, 0.01) 100%); position: sticky; bottom: 0; z-index: 10;">
+                    <button type="button" onclick="closeEmployeeModal()" style="background: linear-gradient(135deg, #0052CC 0%, #003DA5 100%); color: white; padding: 14px 32px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 15px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3); text-transform: uppercase; letter-spacing: 0.5px;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(0, 82, 204, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 82, 204, 0.3)'">Close</button>
                 </div>
             </div>
         `;
@@ -3813,6 +4508,39 @@ fetchLeaveHistory();
 
     // ===== GLOBAL SCOPE FUNCTIONS =====
     // These functions are defined outside DOMContentLoaded so they can be called from HTML onclick handlers
+    
+    // ===== DEPARTMENT MODAL FUNCTIONS =====
+    function closeEditDepartmentModal() {
+        const modal = document.getElementById('editDepartmentModal');
+        if (modal) modal.style.display = 'none';
+    }
+    
+    function closeDeleteDepartmentModal() {
+        const modal = document.getElementById('deleteDepartmentModal');
+        if (modal) modal.style.display = 'none';
+    }
+    
+    // ===== POSITION MODAL FUNCTIONS =====
+    function closeEditPositionModal() {
+        const modal = document.getElementById('editPositionModal');
+        if (modal) modal.style.display = 'none';
+    }
+    
+    function closeDeletePositionModal() {
+        const modal = document.getElementById('deletePositionModal');
+        if (modal) modal.style.display = 'none';
+    }
+    
+    // ===== ADD DEPARTMENT/POSITION MODAL FUNCTIONS =====
+    function closeAddDepartmentModal() {
+        const modal = document.getElementById('addDepartmentModal');
+        if (modal) modal.style.display = 'none';
+    }
+    
+    function closeAddPositionModal() {
+        const modal = document.getElementById('addPositionModal');
+        if (modal) modal.style.display = 'none';
+    }
     
     // Function to close employee modal
     function closeEmployeeModal() {
@@ -3932,6 +4660,276 @@ fetchLeaveHistory();
             updateWizardDisplay();
         }
     });
+
+    // ===== TRAVEL MANAGEMENT FUNCTIONS =====
+    window.loadManageTravelOrders = function() {
+        fetch('fetch_travel_orders.php?status=Pending')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('manage-travel-tbody');
+                if (!tbody) return;
+                
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;">No pending travel orders</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = data.map(row => `
+                    <tr>
+                        <td>${row.ControlNumber || 'N/A'}</td>
+                        <td>${row.FirstName} ${row.LastName}</td>
+                        <td>${row.Destination}</td>
+                        <td>${row.Purpose}</td>
+                        <td>${new Date(row.StartDate).toLocaleDateString()}</td>
+                        <td>${new Date(row.EndDate).toLocaleDateString()}</td>
+                        <td><span style="background:#ffc107;padding:4px 8px;border-radius:4px;color:#000;">${row.Status}</span></td>
+                        <td style="display:flex;gap:8px;justify-content:center;">
+                            <button class="approve-travel-btn" data-id="${row.TravelID}" title="Approve" style="background:none;border:none;padding:8px;cursor:pointer;color:#28a745;font-size:18px;">✓</button>
+                            <button class="reject-travel-btn" data-id="${row.TravelID}" title="Reject" style="background:none;border:none;padding:8px;cursor:pointer;color:#dc3545;font-size:18px;">✕</button>
+                            <button class="view-travel-btn" data-id="${row.TravelID}" title="View" style="background:none;border:none;padding:8px;cursor:pointer;color:#007bff;font-size:18px;">👁️</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                attachTravelButtonListeners();
+            })
+            .catch(err => console.error('Failed to load travel orders', err));
+    };
+
+    window.loadOngoingTravels = function() {
+        fetch('fetch_travel_orders.php?status=Approved')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('ongoing-travel-tbody');
+                if (!tbody) return;
+                
+                // Filter to show only travels where EndDate is today or in the future
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                const ongoingData = data.filter(row => {
+                    const endDate = new Date(row.EndDate);
+                    endDate.setHours(0, 0, 0, 0);
+                    return endDate >= today;
+                });
+                
+                if (!ongoingData || ongoingData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;">No ongoing/upcoming travels</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = ongoingData.map(row => `
+                    <tr>
+                        <td>${row.ControlNumber || 'N/A'}</td>
+                        <td>${row.FirstName} ${row.LastName}</td>
+                        <td>${row.Destination}</td>
+                        <td>${row.Purpose}</td>
+                        <td>${new Date(row.StartDate).toLocaleDateString()}</td>
+                        <td>${new Date(row.EndDate).toLocaleDateString()}</td>
+                        <td><span style="background:#28a745;padding:4px 8px;border-radius:4px;color:#fff;">${row.Status}</span></td>
+                        <td style="display:flex;gap:8px;justify-content:center;">
+                            <button class="view-travel-btn" data-id="${row.TravelID}" title="View" style="background:none;border:none;padding:8px;cursor:pointer;color:#007bff;font-size:18px;">👁️</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                attachTravelButtonListeners();
+            })
+            .catch(err => console.error('Failed to load ongoing travels', err));
+    };
+
+    window.loadTravelHistory = function() {
+        console.log('loadTravelHistory called');
+        fetch('fetch_travel_orders.php?status=Approved,Rejected')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Fetched travel data:', data);
+                const tbody = document.getElementById('travel-history-tbody');
+                if (!tbody) {
+                    console.error('travel-history-tbody not found');
+                    return;
+                }
+                
+                // Filter to show only travels where EndDate is in the past
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                console.log('Today date:', today);
+                
+                const historyData = data.filter(row => {
+                    const endDate = new Date(row.EndDate);
+                    endDate.setHours(0, 0, 0, 0);
+                    const isPast = endDate < today;
+                    console.log(`Travel ${row.ControlNumber}: EndDate=${endDate}, isPast=${isPast}`);
+                    return isPast;
+                });
+                
+                console.log('Filtered history data:', historyData);
+                
+                if (!historyData || historyData.length === 0) {
+                    console.log('No history data found');
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#666;">No travel history</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = historyData.map(row => `
+                    <tr>
+                        <td>${row.ControlNumber || 'N/A'}</td>
+                        <td>${row.FirstName} ${row.LastName}</td>
+                        <td>${row.Destination}</td>
+                        <td>${row.Purpose}</td>
+                        <td>${new Date(row.StartDate).toLocaleDateString()}</td>
+                        <td>${new Date(row.EndDate).toLocaleDateString()}</td>
+                        <td><span style="background:${row.Status === 'Approved' ? '#28a745' : '#dc3545'};padding:4px 8px;border-radius:4px;color:#fff;">${row.Status}</span></td>
+                        <td style="display:flex;gap:8px;justify-content:center;">
+                            <button class="view-travel-btn" data-id="${row.TravelID}" title="View" style="background:none;border:none;padding:8px;cursor:pointer;color:#007bff;font-size:18px;">👁️</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                console.log('Travel history rendered');
+                attachTravelButtonListeners();
+            })
+            .catch(err => console.error('Failed to load travel history', err));
+    };
+
+    function attachTravelButtonListeners() {
+        // Approve travel
+        document.querySelectorAll('.approve-travel-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                Swal.fire({
+                    title: 'Approve Travel Order?',
+                    text: 'Are you sure you want to approve this travel order?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Approve',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('approve_travel.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: 'id=' + encodeURIComponent(id)
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Approved!', 'Travel order approved successfully.', 'success');
+                                loadManageTravelOrders();
+                            } else {
+                                Swal.fire('Error', data.error || 'Failed to approve', 'error');
+                            }
+                        })
+                        .catch(err => Swal.fire('Error', 'Network error', 'error'));
+                    }
+                });
+            });
+        });
+
+        // Reject travel
+        document.querySelectorAll('.reject-travel-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                Swal.fire({
+                    title: 'Reject Travel Order?',
+                    text: 'Are you sure you want to reject this travel order?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Reject',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('reject_travel.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: 'id=' + encodeURIComponent(id)
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Rejected!', 'Travel order rejected.', 'success');
+                                loadManageTravelOrders();
+                            } else {
+                                Swal.fire('Error', data.error || 'Failed to reject', 'error');
+                            }
+                        })
+                        .catch(err => Swal.fire('Error', 'Network error', 'error'));
+                    }
+                });
+            });
+        });
+
+        // View travel
+        document.querySelectorAll('.view-travel-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                window.open('fetch_travel_order_content.php?id=' + encodeURIComponent(id), '_blank', 'width=900,height=700');
+            });
+        });
+    }
+
+    // Load travel data when sections are shown
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const target = mutation.target;
+                if (target.id === 'manage-travel-section' && target.style.display !== 'none') {
+                    loadManageTravelOrders();
+                } else if (target.id === 'ongoing-travel-section' && target.style.display !== 'none') {
+                    loadOngoingTravels();
+                } else if (target.id === 'travel-history-section' && target.style.display !== 'none') {
+                    loadTravelHistory();
+                }
+            }
+        });
+    });
+
+    const sections = document.querySelectorAll('[id$="-travel-section"]');
+    console.log('Found travel sections:', sections.length);
+    sections.forEach(section => {
+        console.log('Observing section:', section.id);
+        observer.observe(section, { attributes: true, attributeFilter: ['style'] });
+    });
+    
+    // Also add direct click handlers for menu buttons
+    document.querySelectorAll('.menu-btn[data-target="travel-history-section"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            console.log('Travel History button clicked');
+            setTimeout(() => loadTravelHistory(), 100);
+        });
+    });
+
+    // ===== ASSIGN TRAVEL MODAL HANDLERS =====
+    // Load employees into the dropdown
+    window.loadEmployeesForAssignTravel = function() {
+        console.log('Loading employees for assign travel...');
+        fetch('fetch_employees_list.php')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Employees loaded:', data);
+                const select = document.getElementById('assignTravelEmployee');
+                if (!select) {
+                    console.error('Employee select not found');
+                    return;
+                }
+                
+                select.innerHTML = '<option value="">-- Select an Employee --</option>';
+                if (data && Array.isArray(data)) {
+                    data.forEach(emp => {
+                        const option = document.createElement('option');
+                        option.value = emp.EmployeeID;
+                        option.textContent = `${emp.FirstName} ${emp.LastName} (${emp.DepartmentName || 'N/A'})`;
+                        select.appendChild(option);
+                    });
+                }
+            })
+            .catch(err => console.error('Failed to load employees', err));
+    };
+
 
     });
 </script>

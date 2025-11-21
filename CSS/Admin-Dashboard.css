@@ -525,7 +525,7 @@ body {
 
   padding: 8px 15px;
 
-  background: #27ae60;
+  background: #808080;
 
   color: white;
 
@@ -547,7 +547,7 @@ body {
 
 .add-btn:hover {
 
-  background: #219150;
+  background: #696969;
 
 }
 
@@ -557,7 +557,7 @@ body {
 
   padding: 8px 15px;
 
-  background: #27ae60;
+  background: #808080;
 
   color: white;
 
@@ -590,6 +590,10 @@ button {
   border: none;
 
   cursor: pointer;
+
+  background: #808080;
+
+  color: white;
 
 }
 
@@ -687,9 +691,9 @@ table td {
 
 table th {
 
-  background: linear-gradient(180deg, #0052CC 0%, #003DA5 100%);
+  background: #ffffff;
 
-  color: white;
+  color: #000;
 
   font-weight: 600;
 
@@ -777,9 +781,9 @@ table tbody tr:last-child {
 
 .leave-type-table th {
 
-  background: #eaf6ff;
+  background: #ffffff;
 
-  color: #173db8;
+  color: #000;
 
   font-size: 15px;
 
@@ -1642,13 +1646,33 @@ label.no-doc {
   display: none !important; /* Always hidden by default */
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 1000;
   padding: 10px;
   overflow-y: auto;
 }
 
 .modal[style*="display: block"] {
   display: flex !important;
+}
+
+.modal {
+  display: none !important;
+}
+
+.modal[style="display: block;"],
+.modal[style*="display: block"] {
+  display: flex !important;
+  z-index: 1000 !important;
+}
+
+/* Specific rule for assign travel modal */
+#assignTravelModal {
+  display: none !important;
+}
+
+#assignTravelModal[style*="display: flex"] {
+  display: flex !important;
+  z-index: 9999 !important;
 }
 
 .modal-content {

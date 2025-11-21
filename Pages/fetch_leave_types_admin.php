@@ -7,7 +7,7 @@ $leaveTypes = []; // map id => row
 $allowedUnitTypes = ['Leave Credit', 'Fixed Days'];
 $allowedFrequencies = ['NA', 'PerYear', 'PerEvent'];
 
-$res = $conn->query("SELECT LeaveTypeID, TypeName, UnitType, MaxDaysPerUsage, UsageFrequency, Description, PointCost, DeductFromLeaveTypeID, AllowDocuments, MaxDocuments FROM LeaveType ORDER BY LeaveTypeID ASC");
+$res = $conn->query("SELECT LeaveTypeID, TypeName, UnitType, MaxDaysPerUsage, UsageFrequency, Description, PointCost, DeductFromLeaveTypeID, AllowDocuments, MaxDocuments FROM LeaveType ORDER BY LeaveTypeID DESC");
 
 if ($res) {
     // --- FIRST LOOP: This part is correct ---
@@ -102,9 +102,9 @@ if (count($leaveTypesAdmin) > 0) {
                 <td style=\"text-align:right;\">{$pointCost}</td>
                 <td style=\"text-align:right;\">{$maxDays}</td>
                 <td>{$deductName}</td>
-                <td>
-                    <button class=\"edit-btn\" data-id=\"{$id}\" style=\"background:#007bff;color:#fff;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;\">Edit</button>
-                    <button class=\"delete-btn\" data-id=\"{$id}\" style=\"background:#dc3545;color:#fff;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-left:6px;\">Delete</button>
+                <td style='display:flex;gap:8px;align-items:center;justify-content:center;'>
+                    <button class=\"edit-btn\" data-id=\"{$id}\" title=\"Edit Leave Type\" style=\"background:none;border:none;padding:8px;cursor:pointer;color:#007bff;font-size:18px;transition:all 0.3s ease;\" onmouseover=\"this.style.color='#0056b3'; this.style.transform='scale(1.2)'\" onmouseout=\"this.style.color='#007bff'; this.style.transform='scale(1)'\">✏️</button>
+                    <button class=\"delete-btn\" data-id=\"{$id}\" title=\"Delete Leave Type\" style=\"background:none;border:none;padding:8px;cursor:pointer;color:#dc3545;font-size:18px;transition:all 0.3s ease;\" onmouseover=\"this.style.color='#c82333'; this.style.transform='scale(1.2)'\" onmouseout=\"this.style.color='#dc3545'; this.style.transform='scale(1)'\">🗑️</button>
                 </td>
               </tr>";
     }

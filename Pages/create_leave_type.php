@@ -1,7 +1,12 @@
 <?php
 // FILE: create_leave_type.php (Updated)
 
+// Prevent any output before JSON
+ob_start();
 header('Content-Type: application/json');
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 include 'db_connect.php'; 
 
 $response = ['success' => false, 'error' => 'Invalid request.'];

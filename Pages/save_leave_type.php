@@ -1,5 +1,10 @@
 <?php
+// Prevent any output before JSON
+ob_start();
 header('Content-Type: application/json');
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 include 'db_connect.php';
 
 // --- 1. Get All Inputs from the New Modal ---
@@ -80,7 +85,7 @@ $stmt->close();
 $sql = "UPDATE LeaveType SET 
             TypeName = ?, 
             UnitType = ?, 
-            FixedDays = ?, 
+            MaxDaysPerUsage = ?, 
             Description = ?, 
             PointCost = ?, 
             DeductFromLeaveTypeID = ?, 

@@ -691,7 +691,7 @@ NEW "VIEW APPLICATION DETAILS" MODAL
         }
         .cs-credits-table thead th {
             font-weight: bold;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             font-size: 9px;
             color: #000;
         }
@@ -699,7 +699,7 @@ NEW "VIEW APPLICATION DETAILS" MODAL
             text-align: left;
             font-weight: bold;
             font-size: 9px;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             padding-left: 5px;
             color: #000;
         }
