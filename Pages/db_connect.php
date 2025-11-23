@@ -5,7 +5,7 @@
  */
 
 // Load configuration
-require_once(__DIR__ . '/../config.php');
+require_once(__DIR__ . '../../config.php');
 
 // Create connection using constants from config.php
 $conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);

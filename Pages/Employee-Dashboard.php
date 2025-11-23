@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'employee') {
-    header("Location: /hrlgu/Pages/Login.php");
+    header("Location: /Pages/Login.php");
     exit();
 }
 include 'db_connect.php';
@@ -51,6 +51,20 @@ $usageStmt->close();
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Override icon backgrounds for action buttons */
+        .action-btn-view i,
+        .action-btn-download i,
+        .action-btn-replace i,
+        .action-btn-upload i {
+            background: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            width: auto !important;
+            height: auto !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -59,7 +73,7 @@ $usageStmt->close();
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo-section">
-                    <img src="/hrlgu/Pictures/logo.png" alt="Logo" class="sidebar-logo">
+                    <img src="../Pictures/logo.png" alt="Logo" class="sidebar-logo" onerror="this.style.opacity=0">
                     <h2 class="sidebar-title">Admin Menu</h2>
                 </div>
             </div>
@@ -72,6 +86,11 @@ $usageStmt->close();
             <button class="menu-btn" data-title="My Documents" data-target="documents-section">
                 <i class="fas fa-file-alt"></i>
                 <span class="btn-text">My Documents</span>
+            </button>
+
+            <button class="menu-btn" data-title="Travel Orders" data-target="travel-section">
+                <i class="fas fa-plane"></i>
+                <span class="btn-text">Travel Orders</span>
             </button>
 
             <div class="menu-group">
@@ -124,8 +143,8 @@ $usageStmt->close();
                     style="margin-top:20px; padding:15px; border:1px solid #ddd; border-radius:10px; background:#fff;">
                     <div class="profile-info">
     <div class="photo-wrapper">
-        <img src="/<?php echo $photoPath; ?>" alt="Profile Photo" 
-             class="profile-photo" id="profilePhotoImg">
+        <img src="../<?php echo $photoPath; ?>" alt="Profile Photo" 
+             class="profile-photo" id="profilePhotoImg" onerror="this.src='../Pictures/default-avatar.png'">
         
         <button id="changeProfilePhotoBtn" class="change-photo-btn">Change</button>
     </div>
@@ -255,6 +274,28 @@ $usageStmt->close();
                         </thead>
                         <tbody id="myDocumentsTableBody">
                             <!-- populated by JS (uses get_employee.php) -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Travel Orders -->
+                <div id="travel-section" class="section" style="display:none;">
+                    <h2>Travel Orders</h2>
+                    <button class="open-request-travel-modal open-modal-btn" style="background:#0052CC;color:#fff;border:none;padding:12px 20px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;margin-bottom:20px;transition:all 0.3s ease;" onmouseover="this.style.background='#003a99'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='#0052CC'; this.style.transform='scale(1)'">
+                        <i class="fas fa-plus"></i> Request Travel Order
+                    </button>
+                    <table style="width:100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background: #0052CC; color: white;">
+                                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Destination</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Purpose</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Dates</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Status</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="travelOrdersTableBody">
+                            <tr><td colspan="5" style="text-align:center; padding: 20px; color: #999;">Loading travel orders...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -557,6 +598,32 @@ NEW LEAVE HISTORY SECTION
                             <button type="button" id="cancelApplyBtn"
                                 style="margin-left:8px;padding:8px 12px;border-radius:6px;">Cancel</button>
                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Request Travel Order Modal -->
+        <div id="requestTravelModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" id="closeRequestTravelModal">&times;</span>
+                <h2>Request Travel Order</h2>
+                <form action="apply_travel.php" method="POST" enctype="multipart/form-data">
+                    <label for="travel_destination">Destination:</label>
+                    <input type="text" name="destination" id="travel_destination" required style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;">
+
+                    <label for="travel_purpose">Purpose:</label>
+                    <textarea name="purpose" id="travel_purpose" required style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px; min-height:80px;"></textarea>
+
+                    <label for="travel_start_date">Start Date:</label>
+                    <input type="date" name="start_date" id="travel_start_date" required style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;">
+
+                    <label for="travel_end_date">End Date:</label>
+                    <input type="date" name="end_date" id="travel_end_date" required style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;">
+
+                    <div style="display:flex; gap:10px; justify-content:flex-end;">
+                        <button type="button" class="close-modal-btn" onclick="closeRequestTravelModal()" style="background:#999; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer;">Cancel</button>
+                        <button type="submit" style="background:#0052CC; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer;">Submit Request</button>
                     </div>
                 </form>
             </div>
@@ -1148,6 +1215,30 @@ if (endDateInput) {
             };
         }
         // --- END: APPLY LEAVE MODAL LOGIC ---
+
+        // --- START: REQUEST TRAVEL ORDER MODAL LOGIC ---
+        const requestTravelBtn = document.querySelector('.open-request-travel-modal');
+        const requestTravelModal = document.getElementById('requestTravelModal');
+        const closeRequestTravelBtn = document.getElementById('closeRequestTravelModal');
+
+        if (requestTravelBtn && requestTravelModal) {
+            requestTravelBtn.addEventListener('click', () => {
+                requestTravelModal.style.display = 'block';
+            });
+        }
+
+        if (closeRequestTravelBtn && requestTravelModal) {
+            closeRequestTravelBtn.addEventListener('click', () => {
+                requestTravelModal.style.display = 'none';
+            });
+            window.addEventListener('click', (event) => {
+                if (event.target === requestTravelModal) {
+                    requestTravelModal.style.display = 'none';
+                }
+            });
+        }
+        // --- END: REQUEST TRAVEL ORDER MODAL LOGIC ---
+
         function preventWeekendSelection(event) {
         const input = event.target;
         const selectedDate = input.value;
@@ -1223,8 +1314,8 @@ function loadMyDocuments() {
 
     tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Loading...</td></tr>';
 
-    // **IMPORTANT**: Make sure this fetch path is correct (e.g., /hrlgu/Pages/...)
-    fetch("/Pages/get_employee_files.php") 
+    // **IMPORTANT**: Make sure this fetch path is correct (e.g., /Pages/...)
+    fetch("get_employee_files.php") 
         .then(response => {
             if (!response.ok) throw new Error("Network response was not ok (404?)");
             return response.json();
@@ -1258,15 +1349,15 @@ function loadMyDocuments() {
                     // **FIX: Only show "Replace" for standard docs**
                     if (docIsStandard) {
                         actionsCell = `
-                            <a href="${filePath}" target="_blank" class="action-btn-view" style="margin-right: 5px;">View</a>
-                            <a href="${filePath}" download="${fileName}" class="action-btn-download" style="margin-right: 5px;">Download</a>
-                            <button class="action-btn-replace" data-doctype="${file.DocType}">Replace</button>
+                            <a href="${filePath}" target="_blank" class="action-btn-view" title="View" style="margin-right: 12px; color: #4c8df5; text-decoration: none; display: inline-block; font-size: 18px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.color='#3a5fc4'; this.style.transform='scale(1.2)'" onmouseout="this.style.color='#4c8df5'; this.style.transform='scale(1)'"><i class="fas fa-eye"></i></a>
+                            <a href="${filePath}" download="${fileName}" class="action-btn-download" title="Download" style="margin-right: 12px; color: #28a745; text-decoration: none; display: inline-block; font-size: 18px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.color='#218838'; this.style.transform='scale(1.2)'" onmouseout="this.style.color='#28a745'; this.style.transform='scale(1)'"><i class="fas fa-download"></i></a>
+                            <button class="action-btn-replace" data-doctype="${file.DocType}" title="Replace" style="border: none; background: none; color: #9c27b0; padding: 0; cursor: pointer; display: inline-block; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#7b1fa2'; this.style.transform='scale(1.2)'" onmouseout="this.style.color='#9c27b0'; this.style.transform='scale(1)'"><i class="fas fa-sync-alt"></i></button>
                         `;
                     } else {
                         // This is an "extra" doc, no replacing
                         actionsCell = `
-                            <a href="${filePath}" target="_blank" class="action-btn-view" style="margin-right: 5px;">View</a>
-                            <a href="${filePath}" download="${fileName}" class="action-btn-download">Download</a>
+                            <a href="${filePath}" target="_blank" class="action-btn-view" title="View" style="margin-right: 12px; color: #4c8df5; text-decoration: none; display: inline-block; font-size: 18px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.color='#3a5fc4'; this.style.transform='scale(1.2)'" onmouseout="this.style.color='#4c8df5'; this.style.transform='scale(1)'"><i class="fas fa-eye"></i></a>
+                            <a href="${filePath}" download="${fileName}" class="action-btn-download" title="Download" style="color: #28a745; text-decoration: none; display: inline-block; font-size: 18px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.color='#218838'; this.style.transform='scale(1.2)'" onmouseout="this.style.color='#28a745'; this.style.transform='scale(1)'"><i class="fas fa-download"></i></a>
                         `;
                     }
                 } else {
@@ -1276,7 +1367,7 @@ function loadMyDocuments() {
                     // **FIX: Only show "Upload" for standard docs**
                     if (docIsStandard) {
                         actionsCell = `
-                            <button class="action-btn-upload" data-doctype="${file.DocType}">Upload</button>
+                            <button class="action-btn-upload" data-doctype="${file.DocType}" title="Upload" style="border: none; background: none; color: #007bff; padding: 0; cursor: pointer; display: inline-block; font-size: 18px; transition: all 0.3s ease;" onmouseover="this.style.color='#0056b3'; this.style.transform='scale(1.2)'" onmouseout="this.style.color='#007bff'; this.style.transform='scale(1)'"><i class="fas fa-upload"></i></button>
                         `;
                     } else {
                         // This is an "extra" doc type that somehow has no file.
@@ -1331,7 +1422,7 @@ function loadMyDocuments() {
                         button.disabled = true;
                         button.textContent = 'Uploading...';
 
-                        // **IMPORTANT**: Make sure this path is correct (e.g., /hrlgu/Pages/...)
+                        // **IMPORTANT**: Make sure this path is correct (e.g., /Pages/...)
                         fetch('upload_employee_document.php', {
                             method: 'POST',
                             body: formData
@@ -1382,8 +1473,20 @@ function loadMyDocuments() {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (!confirm('Are you sure you want to logout?')) return;
-                window.location.href = '/Pages/Logout.php';
+                Swal.fire({
+                    title: 'Logout?',
+                    text: 'Are you sure you want to logout?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Logout',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Pages/Logout.php';
+                    }
+                });
             });
         }
         // --- END LOGOUT ---
@@ -1589,7 +1692,7 @@ function loadMyDocuments() {
             formData.append('croppedImage', blob, 'profile.png'); 
 
             // Upload using fetch
-            // **IMPORTANT**: Adjust this path to your PHP file (e.g., /hrlgu/Pages/...)
+            // **IMPORTANT**: Adjust this path to your PHP file (e.g., /Pages/...)
             fetch('/Pages/upload_profile_photo.php', {
                 method: 'POST',
                 body: formData,
@@ -1862,8 +1965,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         sidebarOverlay.classList.remove('open');
                     }
                 } else if (target === 'n/a') {
-                    // Handle logout
-                    window.location.href = '/hrlgu/Pages/Logout.php';
+                    // Handle logout with SweetAlert
+                    Swal.fire({
+                        title: 'Logout?',
+                        text: 'Are you sure you want to logout?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, Logout',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/Pages/Logout.php';
+                        }
+                    });
                 }
             }
         });
@@ -1872,9 +1988,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle submenu button clicks
     const submenuButtons = document.querySelectorAll('.submenu-btn');
     submenuButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
             const target = this.getAttribute('data-target');
+            // Skip logout button - it has its own handler
+            if (this.getAttribute('data-title') === 'Logout') {
+                return;
+            }
             if (target && target !== 'n/a') {
+                e.preventDefault();
+                e.stopPropagation();
                 // Remove active class from all buttons
                 menuButtons.forEach(btn => btn.classList.remove('active'));
                 submenuButtons.forEach(btn => btn.classList.remove('active'));
@@ -1904,8 +2026,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     sidebarOverlay.classList.remove('open');
                 }
             } else if (target === 'n/a') {
-                // Handle logout
-                window.location.href = '/hrlgu/Pages/Logout.php';
+                // Handle logout with SweetAlert
+                Swal.fire({
+                    title: 'Logout?',
+                    text: 'Are you sure you want to logout?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Logout',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/Pages/Logout.php';
+                    }
+                });
             }
         });
     });
@@ -1915,7 +2050,92 @@ document.addEventListener('DOMContentLoaded', function() {
     if (firstMenuBtn) {
         firstMenuBtn.classList.add('active');
     }
+    
+    // Load travel orders when the page loads
+    loadTravelOrders();
 });
+
+/**
+ * Closes the Request Travel Order modal
+ */
+function closeRequestTravelModal() {
+    const modal = document.getElementById('requestTravelModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+/**
+ * Fetches the logged-in employee's travel orders and populates the table
+ */
+function loadTravelOrders() {
+    const tableBody = document.getElementById("travelOrdersTableBody");
+    if (!tableBody) {
+        console.error("Error: Table body 'travelOrdersTableBody' not found.");
+        return;
+    }
+
+    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #999;">Loading travel orders...</td></tr>';
+
+    fetch("fetch_employee_travel_orders.php")
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.json();
+        })
+        .then(travelOrders => {
+            if (travelOrders.error) {
+                throw new Error(travelOrders.error);
+            }
+
+            if (travelOrders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #999;">No travel orders found.</td></tr>';
+                return;
+            }
+
+            let html = "";
+            travelOrders.forEach(order => {
+                const startDate = new Date(order.StartDate).toLocaleDateString();
+                const endDate = new Date(order.EndDate).toLocaleDateString();
+                
+                // Status badge color
+                let statusColor = '#999';
+                let statusBg = '#f0f0f0';
+                if (order.Status === 'Approved') {
+                    statusColor = '#fff';
+                    statusBg = '#28a745';
+                } else if (order.Status === 'Pending') {
+                    statusColor = '#fff';
+                    statusBg = '#ffc107';
+                } else if (order.Status === 'Rejected') {
+                    statusColor = '#fff';
+                    statusBg = '#dc3545';
+                }
+
+                html += `
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 12px; border: 1px solid #ddd;">${order.Destination}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">${order.Purpose}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">${startDate} to ${endDate}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">
+                            <span style="background: ${statusBg}; color: ${statusColor}; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                ${order.Status}
+                            </span>
+                        </td>
+                        <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
+                            <a href="fetch_travel_order_content.php?id=${order.TravelID}" target="_blank" title="View/Print" style="background: #0052CC; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#003a99'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='#0052CC'; this.style.transform='scale(1)'">
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = html;
+        })
+        .catch(error => {
+            console.error("Error loading travel orders:", error);
+            tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red; padding: 20px;">Error: ${error.message}</td></tr>`;
+        });
+}
 
 </script>
 
